@@ -152,6 +152,8 @@ use({
 -- 外部コマンドを使用してコードをフォーマット
 use("acro5piano/nvim-format-buffer")
 
+use "brenoprata10/nvim-highlight-colors"
+
 
 -- 消さない
 end)
