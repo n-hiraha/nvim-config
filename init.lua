@@ -168,8 +168,8 @@ bufferline.setup({
   },
 })
 
-vim.keymap.set('n', '<C-h>', '<Cmd>BufferLineCycleNext<CR>', {})
-vim.keymap.set('n', '<C-l>', '<Cmd>BufferLineCyclePrev<CR>', {})
+vim.keymap.set('n', '<C-l>', '<Cmd>BufferLineCycleNext<CR>', {})
+vim.keymap.set('n', '<C-h>', '<Cmd>BufferLineCyclePrev<CR>', {})
 
 -- LspSaga
 local status, saga = pcall(require, "lspsaga")
