@@ -54,6 +54,7 @@ return require('packer').startup(function(use)
 
   -- You can alias plugin names
   use {'dracula/vim', as = 'dracula'}
+	use {'jparise/vim-graphql'}
 
 
   use {
@@ -61,23 +62,36 @@ return require('packer').startup(function(use)
   	requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
 
-	  use('neovim/nvim-lspconfig')
+	use('neovim/nvim-lspconfig')
 	use('jose-elias-alvarez/null-ls.nvim')
 	use('MunifTanjim/prettier.nvim')
 
-  use "hrsh7th/nvim-cmp"
-  use "hrsh7th/cmp-nvim-lsp"
-  use "hrsh7th/vim-vsnip"
+	-- 補完エンジン本体
+  use "hrsh7th/nvim-cmp" 
+	----LSPを補完ソースに
+  use 'hrsh7th/cmp-nvim-lsp' 
+	----bufferを補完ソースに
+  -- use 'hrsh7th/cmp-buffer'　
+	----pathを補完ソースに
+  use 'hrsh7th/cmp-path'  
+	------スニペットエンジン
+  use 'hrsh7th/vim-vsnip' 
+	----スニペットを補完ソースに
+  use 'hrsh7th/cmp-vsnip' 
+	----補完欄にアイコンを表示
+  use 'onsails/lspkind.nvim' 
 
-  use "onsails/lspkind-nvim"
-  use "L3MON4D3/LuaSnip"
-  use "hrsh7th/cmp-buffer"
+   use "L3MON4D3/LuaSnip"
+  use 'hrsh7th/cmp-cmdline' 
 
   use {
   'nvim-telescope/telescope.nvim', tag = '0.1.0',
 -- or                            , branch = '0.1.x',
   requires = { {'nvim-lua/plenary.nvim'} }
 }
+
+-- ファイラー
+use { "nvim-telescope/telescope-file-browser.nvim" }
 
 use {
 	"windwp/nvim-ts-autotag",
@@ -89,6 +103,7 @@ use {
     config = function() require("nvim-autopairs").setup {} end
 }
 
+-- 前回良かったテーマ
 use {
 	"EdenEast/nightfox.nvim",
 	config = function()
@@ -96,9 +111,46 @@ use {
 	end
 }
 
+
 -- LSP
 use { "williamboman/mason.nvim" }
 use { "williamboman/mason-lspconfig.nvim" }
+
+-- Tab 
+use {'akinsho/bufferline.nvim', tag = "v3.*", requires = 'kyazdani42/nvim-web-devicons',
+		config = function()
+			vim.otp.termguicolors = true
+			local line =  require("bufferline")
+			line.setup{}
+		end
+}
+
+
+-- Hovering Documentation
+use({
+    "glepnir/lspsaga.nvim",
+    branch = "main",
+    config = function()
+        local saga = require("lspsaga")
+
+        saga.init_lsp_saga({
+            -- your configuration
+						typescript = 'typescript'
+        })
+
+				local opts = { noremap = true, silent = true } 
+				vim.keymap .set('n', '<C-n>>', '<Cmd>Lspsaga diagnostic_jump_next<CR>', opts) 
+				vim.keymap.set('n', '<C-h>', '<Cmd>Lspsaga hover_doc<CR>' , opts) 
+				vim.keymap.set('n', 'gd', '<Cmd>Lspsaga lsp_finder<CR>', opts) 
+				vim.keymap.set('i', '<C-k>', '<Cmd> Lspsaga signature_help<CR>', opts) 
+				vim.keymap.set('n', 'gp', '<Cmd>Lspsaga preview_definition<CR>', opts) 
+				vim.keymap.set('n', 'gr', '<Cmd>Lspsaga rename<CR>', opts)
+    end,
+})
+
+
+-- 外部コマンドを使用してコードをフォーマット
+use("acro5piano/nvim-format-buffer")
 
 
 -- 消さない
